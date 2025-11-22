@@ -27,12 +27,12 @@ SECRET_KEY = 'django-insecure-your-secret-key-here-change-in-production'
 # Controlled via environment variable so local development can enable admin assets.
 DEBUG = False
 
-AZURE_WEBAPP_NAME = os.getenv('AZURE_WEBAPP_NAME', 'cloudcontactsapp439')
-azure_host = f'{AZURE_WEBAPP_NAME}.azurewebsites.net' if AZURE_WEBAPP_NAME else ''
+
+azure_host = 'DoctorContact439.azurewebsites.net'
 ALLOWED_HOSTS = [
-    host for host in [azure_host, 'localhost', '127.0.0.1'] if host
+  "*",  azure_host
 ]
-CSRF_TRUSTED_ORIGINS = [f'https://{azure_host}'] if azure_host else []
+CSRF_TRUSTED_ORIGINS = ['https://DoctorContact439.azurewebsites.net']
 
 
 # Application definition
