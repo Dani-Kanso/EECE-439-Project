@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Saved · Cloud Contacts{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Contact saved ✅</h2>
+    <p class="muted">Your changes are stored successfully.</p>
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem;">
+        <a href="{% url 'contacts-add' %}" class="btn btn-primary">Add another contact</a>
+        <a href="{% url 'contacts-list' %}" class="btn btn-secondary">Back to directory</a>
+    </div>
+</div>
+{% endblock %}

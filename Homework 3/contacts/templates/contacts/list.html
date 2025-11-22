@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Directory · Cloud Contacts{% endblock %}
+{% block nav_list %}active{% endblock %}
+{% block content %}
+<div class="stack">
+    <div class="card">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.5rem;">
+            <div>
+                <h2 style="margin:0;">Doctor Contact Directory</h2>
+                <p class="muted">Search, sort, and manage all synchronized medical professionals.</p>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <a href="{% url 'contacts-add' %}" class="btn btn-primary">+ Add contact</a>
+                <a href="{% url 'contacts-recommendations' %}" class="btn btn-secondary">Recommendation engine</a>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <form method="get" class="stack">
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+                <h3 style="margin:0;">Search &amp; filters</h3>
+                <div>
+                    <button type="submit" class="btn btn-primary">Apply filters</button>
+                    <a href="{% url 'contacts-list' %}" class="btn btn-secondary">Reset</a>
+                </div>
+            </div>
+            <div class="form-grid">
+                {% for field in search_form %}
+                    <div>
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div style="color:#c2410c; font-size:0.85rem;">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+
+    <div class="card" style="padding:0;">
+        {% if contacts %}
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Specialty</th>
+                            <th>Hospital</th>
+                            <th>Location</th>
+                            <th>Fee (USD)</th>
+                            <th>Rating</th>
+                            <th>Experience</th>
+                            <th>Accepting?</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in contacts %}
+                        <tr>
+                            <td>
+                                <strong>{{ c.name }}</strong><br/>
+                                <span class="muted">{{ c.tags|join:", " }}</span>
+                            </td>
+                            <td>{{ c.specialty }}</td>
+                            <td>{{ c.hospital|default:"-" }}</td>
+                            <td>{{ c.city }}{% if c.state %}, {{ c.state }}{% endif %}</td>
+                            <td>${{ c.consultation_fee|floatformat:2 }}</td>
+                            <td>{{ c.rating|floatformat:1 }}</td>
+                            <td>{{ c.experience_years }} yrs</td>
+                            <td>{{ c.accepts_new_patients|yesno:"Yes,No" }}</td>
+                            <td>
+                                <a href="{% url 'contacts-edit' c.pk %}" class="btn btn-secondary" style="padding:0.4rem 0.9rem;">Edit</a>
+                                <a href="{% url 'contacts-delete' c.pk %}" class="btn btn-danger" style="padding:0.4rem 0.9rem; margin-left:0.3rem;">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div style="padding:1.5rem;">
+                <p>No contacts match your filters.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+

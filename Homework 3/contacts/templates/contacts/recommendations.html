@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Recommendations · Cloud Contacts{% endblock %}
+{% block nav_recommend %}active{% endblock %}
+{% block content %}
+<div class="stack">
+    <div class="card">
+        <h2 style="margin-top:0;">Doctor Recommendation Engine</h2>
+        <p class="muted">
+            Provide specialty, budget, location, and optional coordinates to let the scoring engine rank the best matches.
+        </p>
+    </div>
+    <div class="card">
+        <form method="get" class="stack">
+            {{ form.non_field_errors }}
+            <div class="form-grid">
+                {% for field in form %}
+                    <div>
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div style="color:#c2410c; font-size:0.85rem;">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                <button type="submit" class="btn btn-primary">Recommend</button>
+                <a href="{% url 'contacts-recommendations' %}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="card" style="padding:0;">
+        {% if query_executed %}
+            {% if recommendations %}
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Specialty</th>
+                                <th>Location</th>
+                                <th>Distance</th>
+                                <th>Rating</th>
+                                <th>Fee</th>
+                                <th>Score</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in recommendations %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ entry.contact.name }}</strong><br/>
+                                        <span class="muted">{{ entry.contact.hospital|default:"" }}</span>
+                                    </td>
+                                    <td>{{ entry.contact.specialty }}</td>
+                                    <td>{{ entry.contact.city }}{% if entry.contact.state %}, {{ entry.contact.state }}{% endif %}</td>
+                                    <td>
+                                        {% if entry.distance_km != None %}
+                                            {{ entry.distance_km }} km
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ entry.contact.rating|floatformat:1 }}</td>
+                                    <td>${{ entry.contact.consultation_fee|floatformat:2 }}</td>
+                                    <td>{{ entry.score|floatformat:2 }}</td>
+                                    <td>
+                                        <a href="{% url 'contacts-edit' entry.contact.pk %}" class="btn btn-secondary" style="padding:0.35rem 0.9rem;">Edit</a>
+                                        <a href="{% url 'contacts-delete' entry.contact.pk %}" class="btn btn-danger" style="padding:0.35rem 0.9rem; margin-left:0.3rem;">Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div style="padding:1.5rem;">
+                    <p>No recommendations match the provided preferences. Try relaxing your filters.</p>
+                </div>
+            {% endif %}
+        {% else %}
+            <div style="padding:1.5rem;">
+                <p>Enter at least one preference above to generate recommendations.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
