@@ -30,7 +30,7 @@ DEBUG = False
 
 azure_host = 'DoctorContact439.azurewebsites.net'
 ALLOWED_HOSTS = [
-  "*",  azure_host
+  "*",  azure_host, "localhost"
 ]
 CSRF_TRUSTED_ORIGINS = ['https://DoctorContact439.azurewebsites.net']
 
