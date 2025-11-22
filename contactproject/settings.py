@@ -28,11 +28,11 @@ SECRET_KEY = 'django-insecure-your-secret-key-here-change-in-production'
 DEBUG = False
 
 
-azure_host = 'DoctorContact439.azurewebsites.net'
+azure_host = 'doctorcontact439-b0emb9gbgqafcwf9.uaenorth-01.azurewebsites.net'
 ALLOWED_HOSTS = [
   "*",  azure_host, "localhost"
 ]
-CSRF_TRUSTED_ORIGINS = ['https://DoctorContact439.azurewebsites.net']
+CSRF_TRUSTED_ORIGINS = ['https://doctorcontact439-b0emb9gbgqafcwf9.uaenorth-01.azurewebsites.net']
 
 
 # Application definition
